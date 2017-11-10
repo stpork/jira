@@ -28,9 +28,10 @@ ARGS="$@"
 
 # configure clustering if properties file was specified
 if [ -n "${JIRA_CLUSTER_CONFIG}" ]; then
-    NEW_NODE_ID=$(uuidgen)
-    echo "jira.node.id=${NEW_NODE_ID}" >> "${JIRA_CLUSTER_CONFIG}"
+    #NEW_NODE_ID=$(uuidgen)
+    echo "jira.node.id=${HOSTNAME}" >> "${JIRA_CLUSTER_CONFIG}"
     echo "jira.shared.home=${JIRA_SHARED_HOME}" >> "${JIRA_CLUSTER_CONFIG}"
+	echo "ehcache.peer.discovery=default" >> "${JIRA_CLUSTER_CONFIG}"
     echo "${JIRA_CLUSTER_CONFIG}:"
     cat "${JIRA_CLUSTER_CONFIG}"
 fi
