@@ -21,7 +21,7 @@ USER root
 RUN yum update -y \
 && yum install -y git wget openssl unzip nano net-tools tini telnet which dejavu-* java-${JAVA_VERSION}-openjdk java-${JAVA_VERSION}-openjdk-devel \
 && yum clean all \
-&& rm -rf /var/cache/yum
+&& rm -rf /var/cache/yum \
 && JIRA_URL=https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz \
 && mkdir -p ${JIRA_INSTALL} \
 && mkdir -p ${JIRA_HOME} \
@@ -30,7 +30,7 @@ RUN yum update -y \
 && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_INSTALL} \
 && chmod -R 777 ${JIRA_INSTALL} \
 && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} \
-&& chmod -R 777 ${JIRA_HOME} \
+&& chmod -R 777 ${JIRA_HOME} 
 
 USER ${RUN_USER}:${RUN_GROUP}
 
