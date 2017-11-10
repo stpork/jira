@@ -1,4 +1,4 @@
-FROM stpork/bamboo-centos-base
+FROM stpork/tini-centos
 
 MAINTAINER stpork from Mordor team
 
@@ -8,11 +8,8 @@ JIRA_HOME=/var/atlassian/application-data/jira \
 JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared \
 RUN_USER=daemon \
 RUN_GROUP=daemon \
-M2_HOME=/usr/local/maven \
-GRADLE_HOME=/usr/local/gradle \
 JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk/jre \
 JIRA_CLUSTER_CONFIG="/var/atlassian/application-data/jira/cluster.properties"
-
 
 LABEL io.k8s.description="Atlassian JIRA"
 LABEL io.k8s.display-name="JIRA ${JIRA_VERSION}"
@@ -21,7 +18,6 @@ LABEL io.openshift.expose-services="8080:http"
 USER root
 
 RUN JIRA_URL=https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz \
-&& M2_URL=https://bitbucket.org/stpork/bamboo-agent/downloads/settings.xml \
 && mkdir -p ${JIRA_INSTALL} \
 && mkdir -p ${JIRA_HOME} \
 && curl -fsSL ${JIRA_URL} | tar -xz --strip-components=1 -C "${JIRA_INSTALL}" \
