@@ -37,18 +37,18 @@ fi
 
 # Start jira as the correct user.
 if [ "${UID}" -eq 0 ]; then
-    echo "User is currently root. Will change directory ownership to ${JIRA_AGENT_USER}:${JIRA_AGENT_GROUP}, then downgrade permission to ${JIRA_AGENT_USER}"
-    PERMISSIONS_SIGNATURE=$(stat -c "%u:%U:%a" "${JIRA_AGENT_HOME}")
-    EXPECTED_PERMISSIONS=$(id -u ${JIRA_AGENT_USER}):${JIRA_AGENT_USER}:700
+    echo "User is currently root. Will change directory ownership to ${RUN_USER}:${RUN_GROUP}, then downgrade permission to ${RUN_USER}"
+    PERMISSIONS_SIGNATURE=$(stat -c "%u:%U:%a" "${JIRA_HOME}")
+    EXPECTED_PERMISSIONS=$(id -u ${RUN_USER}):${RUN_USER}:700
     if [ "${PERMISSIONS_SIGNATURE}" != "${EXPECTED_PERMISSIONS}" ]; then
         echo "Updating permissions for JIRA_AGENT_HOME"
-        mkdir -p "${JIRA_AGENT_HOME}/lib" &&
-            chmod -R 700 "${JIRA_AGENT_HOME}" &&
-            chown -R "${JIRA_AGENT_USER}:${JIRA_AGENT_GROUP}" "${JIRA_AGENT_HOME}"
+        mkdir -p "${JIRA_HOME}/lib" &&
+            chmod -R 700 "${JIRA_HOME}" &&
+            chown -R "${RUN_USER}:${RUN_GROUP}" "${JIRA_HOME}"
     fi
     # Now drop privileges
     echo "Executing with downgraded permissions"
-    exec su -s /bin/bash "${JIRA_AGENT_USER}" -c java -jar "${JIRA_AGENT_INSTALL}/${JIRA_AGENT_JAR} ${JIRA_AGENT_SERVER} ${ARGS}"
+    exec su -s /bin/bash "${RUN_USER}" -c java -jar "${JIRA_INSTALL}/bin/start-jira.sh ${ARGS}"
 else
     echo "Executing with default permissions"
     exec "${JIRA_INSTALL}"/bin/start-jira.sh ${ARGS}

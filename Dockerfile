@@ -2,7 +2,8 @@ FROM stpork/tini-centos
 
 MAINTAINER stpork from Mordor team
 
-ENV JIRA_VERSION=7.5.2 \
+ENV JAVA_VERSION=1.8.0 \
+JIRA_VERSION=7.5.2 \
 JIRA_INSTALL=/opt/atlassian/jira \
 JIRA_HOME=/var/atlassian/application-data/jira \
 JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared \
@@ -17,7 +18,11 @@ LABEL io.openshift.expose-services="8080:http"
 
 USER root
 
-RUN JIRA_URL=https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz \
+RUN yum update -y \
+&& yum install -y git wget openssl unzip nano net-tools tini telnet which dejavu-* java-${JAVA_VERSION}-openjdk java-${JAVA_VERSION}-openjdk-devel \
+&& yum clean all \
+&& rm -rf /var/cache/yum
+&& JIRA_URL=https://www.atlassian.com/software/jira/downloads/binary/atlassian-jira-software-${JIRA_VERSION}.tar.gz \
 && mkdir -p ${JIRA_INSTALL} \
 && mkdir -p ${JIRA_HOME} \
 && curl -fsSL ${JIRA_URL} | tar -xz --strip-components=1 -C "${JIRA_INSTALL}" \
@@ -26,11 +31,6 @@ RUN JIRA_URL=https://www.atlassian.com/software/jira/downloads/binary/atlassian-
 && chmod -R 777 ${JIRA_INSTALL} \
 && chown -R ${RUN_USER}:${RUN_GROUP} ${JIRA_HOME} \
 && chmod -R 777 ${JIRA_HOME} \
-&& yum update -y \
-&& yum install -y git wget openssl unzip nano net-tools tini telnet which dejavu-* \
-&& yum clean all \
-&& rm -rf /var/cache/yum
-
 
 USER ${RUN_USER}:${RUN_GROUP}
 
@@ -45,4 +45,3 @@ COPY check-java.sh "${JIRA_INSTALL}/bin/check-java.sh"
 
 CMD ["/entrypoint.sh", "-fg"]
 ENTRYPOINT ["/usr/bin/tini", "--"]
-
