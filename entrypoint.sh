@@ -35,6 +35,11 @@ if [ -n "${JIRA_CLUSTER_CONFIG}" ]; then
     cat "${JIRA_CLUSTER_CONFIG}"
 fi
 
+# if database has been previously configured reuse it from shared directory
+if [ -f shared/dbconfig.xml ]; then 
+    cp shared/dbconfig.xml .
+fi
+
 # Start jira as the correct user.
 if [ "${UID}" -eq 0 ]; then
     echo "User is currently root. Will change directory ownership to ${RUN_USER}:${RUN_GROUP}, then downgrade permission to ${RUN_USER}"
