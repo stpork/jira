@@ -8,7 +8,6 @@ JIRA_HOME=/var/atlassian/application-data/jira \
 JIRA_SHARED_HOME=/var/atlassian/application-data/jira/shared \
 RUN_USER=daemon \
 RUN_GROUP=daemon \
-JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
 JIRA_CLUSTER_CONFIG="/var/atlassian/application-data/jira/cluster.properties"
 
 LABEL io.k8s.description="Atlassian JIRA"
