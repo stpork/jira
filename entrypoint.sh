@@ -39,6 +39,11 @@ if [ -f shared/dbconfig.xml ]; then
     cp shared/dbconfig.xml .
 fi
 
+export JVM_SUPPORT_RECOMMENDED_ARGS="-Dcluster.node.name=$HOSTNAME"
+if [ -f ${JIRA_SHARED_HOME}/cacerts ]; then 
+    JVM_SUPPORT_RECOMMENDED_ARGS="${JVM_SUPPORT_RECOMMENDED_ARGS} -Djavax.net.ssl.trustStore=${JIRA_SHARED_HOME}/cacerts"
+fi
+
 # Start jira as the correct user.
 if [ "${UID}" -eq 0 ]; then
     echo "User is currently root. Will change directory ownership to ${RUN_USER}:${RUN_GROUP}, then downgrade permission to ${RUN_USER}"
