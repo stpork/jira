@@ -10,6 +10,8 @@ RUN_USER=daemon \
 RUN_GROUP=daemon \
 JIRA_CLUSTER_CONFIG="/var/atlassian/application-data/jira/cluster.properties"
 
+ENV HOME=${JIRA_HOME}
+
 LABEL io.k8s.description="Atlassian JIRA"
 LABEL io.k8s.display-name="JIRA ${JIRA_VERSION}"
 LABEL io.openshift.expose-services="8080:http"
